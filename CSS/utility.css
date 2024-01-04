@@ -1,0 +1,59 @@
+.border {
+	border: 2px solid red;
+	margin: 3px;
+}
+.flex {
+	display: flex;
+}
+.justify-center {
+	justify-content: center;
+}
+.items-center {
+	align-items: center;
+}
+.bg-black {
+	background-color: black;
+	color: white;
+}
+.invert {
+	filter: invert(1);
+}
+.bg-gray {
+	background-color: #121212;
+}
+.rounded {
+	border-radius: 7px;
+}
+.m-1 {
+	margin: 5px;
+}
+.p-1 {
+	padding: 10px;
+}
+/* For Webkit browsers (Chrome, Safari) */
+::-webkit-scrollbar {
+	width: 8px; /* Set a width for the scrollbar */
+}
+
+::-webkit-scrollbar-track {
+	display: none; /* Hide the scrollbar track */
+}
+
+::-webkit-scrollbar-thumb {
+	background-color: rgb(62, 57, 57); /* Light gray color for the thumb */
+	border: none; /* Border color for the thumb */
+	border-radius: 6px; /* Border-radius for rounded corners */
+	height: 1px;
+}
+
+/* For Firefox */
+body {
+	scrollbar-color: transparent transparent; /* Firefox fallback */
+	scrollbar-width: thin;
+	overflow: auto; /* Important for hiding scrollbar in Webkit browsers */
+}
+
+/* Show the scrollbar on active scroll */
+body.scroll-active {
+	scrollbar-color: #d3d3d3 #f5f5f5; /* Color for thumb and track when scrolling in Firefox */
+}
