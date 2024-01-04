@@ -1,1 +1,1 @@
--- A Music Streaming Platform implemented with Vanila JavaScript
+##A Music Streaming Platform implemented with Vanilla JavaScript
