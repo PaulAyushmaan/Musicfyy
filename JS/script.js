@@ -76,20 +76,16 @@ const playMusic = (track, pause = false) => {
 	// currentSong.src = '/Songs/' + track + '.mp3';
 	if (logIn === 'done') {
 		if (source === 'nextBtn' || source === 'prevBtn' || source === 'card') {
-			console.log(`else if`);
 			currentSong.src = `/${currFolder}/` + track;
 			currentSong.play();
 			play.src = './images/pause.svg';
 		} else if (source === 'songList') {
-			console.log(`if`);
 			currentSong.src = `/${currFolder}/` + track + '.mp3';
 			currentSong.play();
 		} else {
-			console.log(`else`);
 			currentSong.src = `/${currFolder}/` + track;
 		}
 	} else {
-		console.log(`else`);
 		currentSong.src = `/${currFolder}/` + track;
 	}
 	document.querySelector('.songInfo').innerHTML = decodeURI(
@@ -98,19 +94,24 @@ const playMusic = (track, pause = false) => {
 	document.querySelector('.songTime').innerHTML = '00 : 00 / 00 : 00';
 };
 async function displayAlbums() {
-	let a = await fetch(`/Songs/`);
+	let folder;
+	console.log('displaying');
+	let a = await fetch(`/songs`);
 	let response = await a.text();
 	let div = document.createElement('div');
 	div.innerHTML = response;
+	console.log(response);
 	let anchors = div.getElementsByTagName('a');
+	console.log(anchors);
 	cardContainer = document.querySelector('.cardContainer');
 	let array = Array.from(anchors);
+	console.log(array);
 	for (let index = 0; index < array.length; index++) {
-		const e = array[index];
-		if (e.href.includes(`/Songs/`) && !e.href.includes('.htaccess')) {
-			let folder = e.href.split('/').slice(-2)[1];
+		const event = array[index];
+		if (event.href.includes(`/songs/`) && !event.href.includes('.htaccess')) {
+			folder = event.href.split('/songs/').slice(-2)[1];
 			// Get the metadata of the folder
-			let a = await fetch(`/Songs/${folder}/info.json`);
+			let a = await fetch(`/songs/${folder}/info.json`);
 			let response = await a.json();
 			cardContainer.innerHTML =
 				cardContainer.innerHTML +
@@ -129,7 +130,7 @@ async function displayAlbums() {
 				</svg>
 			</div>
 			<img
-				src="/Songs/${folder}/cover.jpg"
+				src="/songs/${folder}/cover.jpg"
 				alt=""
 			/>
 			<h2>${response.title}</h2>
@@ -142,7 +143,7 @@ async function displayAlbums() {
 	Array.from(document.getElementsByClassName('card')).forEach((e) => {
 		e.addEventListener('click', async (item) => {
 			source = 'card';
-			songs = await getSongs(`Songs/${item.currentTarget.dataset.folder}`);
+			songs = await getSongs(`songs/${item.currentTarget.dataset.folder}`);
 			playMusic(songs[0]);
 		});
 	});
@@ -175,7 +176,13 @@ async function main() {
 		document.querySelector('.circle').style.left = newPosition;
 		document.querySelector('.progress').style.width = newPosition;
 		if (currentSong.ended) {
-			play.src = './images/play.svg';
+			source = 'nextBtn';
+			let index = songs.indexOf(currentSong.src.split('/').slice(-1)[0]);
+			if (index + 1 < songs.length) {
+				playMusic(songs[index + 1]);
+			} else {
+				play.src = './images/play.svg';
+			}
 		}
 	});
 	//Add an event listener to seekbar
@@ -258,6 +265,14 @@ async function main() {
 		document.querySelector('.loginBtn').innerText = 'Log out';
 		//document.querySelector('.loginTxt').style.display = 'none';
 		document.querySelector('.loginTxt').classList.add('none');
+		document.querySelector('.songList').classList.add('pointer');
+	});
+	document.querySelector('.loginTxtLink').addEventListener('click', (e) => {
+		logIn = 'done';
+		document.querySelector('.playbar').style.display = 'block';
+		document.querySelector('.loginBtn').innerText = 'Log out';
+		document.querySelector('.loginTxt').style.display = 'none';
+		//document.querySelector('.loginTxt').classList.add('none');
 		document.querySelector('.songList').classList.add('pointer');
 	});
 }
